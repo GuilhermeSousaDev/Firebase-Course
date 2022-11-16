@@ -1,85 +1,106 @@
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Box,
   TextField,
   Button,
-  InputAdornment,
+  IconButton,
   Stack,
-  CircularProgress,
+  Paper
 } from '@mui/material';
-import db from './services/firebase';
-import { AccountCircle } from '@mui/icons-material';
-import ListData from './components/ListData';
-
+import { AccountCircle, Twitter, Google, Facebook, GitHub } from '@mui/icons-material';
+import { auth } from './services/firebase';
 
 function App() {
   const [form, setForm] = useState();
-  const [data, setData] = useState([]);
-
-  const loadUsers = useCallback(() => {
-    const snapshot = db.find('users');
-
-    setData(snapshot);
-  }, [data]);
 
   const changeForm = useCallback(e => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
-    })
+    });
   }, [form]);
 
-  const createUser = useCallback(() => {
-    if (form?.age && form?.name) {
-      db.create('users', form);
-    }
-  }, [form]);
+  const createAccount = () => {
+    const email = form.email;
+    const password = form.password;
+
+    auth.createUser(email, password);
+  }
 
   return (
     <Box align="center" justifyContent="center" direction="column" spacing={2}>
       <h3>Firebase</h3>
 
-      <Box
-        display="flex"
-        flexDirection="column"
-        sx={{ p: 2, mb: 2, mt: 4, width: '30%', border: '1px solid black', borderRadius: 5 }}
+      <Paper
+        elevation={7}
+        sx={{ 
+          display:"flex",
+          flexDirection:"column",
+          alignItems:"center", 
+          p: 2, mb: 2, mt: 3, width: '40%' 
+        }}
       >
         <TextField 
-          name="name" 
-          label="Name" 
+          name="email" 
+          label="Email" 
           variant="standard" 
-          InputProps={{ 
-            startAdornment:(
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            )
-          }}
           onChange={e => changeForm(e)} 
         />
         <TextField 
-          type="number" 
-          name="age" 
-          label="Age" 
+          name="password" 
+          label="Password" 
           variant="standard"
           onChange={e => changeForm(e)} 
         />
 
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ mt: 4 }}
-          onClick={createUser}
-        >
-          Add User
-        </Button>
-      </Box>
+        <Box display="flex" flexDirection="column" mb={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
+          >
+            Auth
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            sx={{ mt: 2 }}
+            onClick={createAccount}
+          >
+            Create Account
+          </Button>
+        </Box>
 
-      <Button variant="contained" color="primary" onClick={loadUsers}>List Users</Button>
+        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+          <Paper elevation={5}>
+            <IconButton color="primary">
+              <Twitter />
+            </IconButton>
+          </Paper>
+          <Paper elevation={5}>
+            <IconButton color="warning">
+              <Google />
+            </IconButton>
+          </Paper>
+          <Paper elevation={5}>
+            <IconButton color="primary">
+              <GitHub />
+            </IconButton>
+          </Paper>
+          <Paper elevation={5}>
+            <IconButton color="inherit">
+              <Facebook />
+            </IconButton>
+          </Paper>
+          <Paper elevation={5}>
+            <IconButton color="primary">
+              <AccountCircle />
+            </IconButton>
+          </Paper>
+        </Stack>
 
-      <Stack alignItems='center' spacing={2}>
-        { data? <ListData data={data} /> : <CircularProgress /> }
-      </Stack>
+        <Button variant="contained" color="inherit">Logout</Button>
+      </Paper>
     </Box>
   )
 }

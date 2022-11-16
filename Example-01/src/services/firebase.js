@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, set, ref, get, push, onValue } from "firebase/database";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { getDatabase, set, ref, push, onValue } from "firebase/database";
 import { firebaseConfig } from "../config/firebaseConfig";
 
 const app = initializeApp(firebaseConfig);
@@ -29,4 +30,14 @@ const db = {
     }
 }
 
-export default db;
+const auth = {
+    createUser(email, password) {
+        const authApp = getAuth(app);
+
+        createUserWithEmailAndPassword(authApp, email, password)
+            .then(res => console.log(res))
+            .catch(e => console.log(e));
+    }
+}
+
+export { db, auth };

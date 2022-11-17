@@ -5,13 +5,19 @@ import {
   Button,
   IconButton,
   Stack,
-  Paper
+  Paper,
+  Snackbar,
+  Alert,
 } from '@mui/material';
-import { AccountCircle, Twitter, Google, Facebook, GitHub } from '@mui/icons-material';
+import { AccountCircle, Twitter, Google, Facebook, GitHub, Close } from '@mui/icons-material';
 import { auth } from './services/firebase';
 
 function App() {
-  const [form, setForm] = useState();
+  const initialFormState = { email: '', password: '' };
+  const [form, setForm] = useState(initialFormState);
+  const [user, setUser] = useState();
+  const [message, setMessage] = useState('');
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
   const changeForm = useCallback(e => {
     setForm({
@@ -20,16 +26,56 @@ function App() {
     });
   }, [form]);
 
-  const createAccount = () => {
+  const createAccount = async () => {
     const email = form.email;
     const password = form.password;
 
-    auth.createUser(email, password);
+    if (email && password) {
+      await auth.createUser(email, password);
+      setForm(initialFormState);
+      setMessage('User Create');
+      setIsOpenSnackbar(true);
+    }
+  }
+
+  const signUser = async () => {
+    const email = form.email;
+    const password = form.password;
+
+    if (email && password) {
+      const res = await auth.signUser(email, password);
+      
+      setForm(initialFormState);
+      setMessage(`You Authenticate with ${res.email}`);
+      setIsOpenSnackbar(true);
+      setUser(res);
+    }
+  }
+
+  const signoutUser = async () => {
+    await auth.signoutUser();
+    setMessage('You Logout with Success');
+    setIsOpenSnackbar(true);
+    setUser('');
   }
 
   return (
     <Box align="center" justifyContent="center" direction="column" spacing={2}>
-      <h3>Firebase</h3>
+      <h3>Firebase { user ? `Bem Vindo - ${user.email}` : '' } </h3>
+
+      <Snackbar 
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={isOpenSnackbar}
+        autoHideDuration={2500}
+        onClose={_ => setIsOpenSnackbar(false)}
+      >
+        <Alert 
+          severity='success' 
+          onClose={_ => setIsOpenSnackbar(false)}
+        >
+          { message }
+        </Alert>
+      </Snackbar>
 
       <Paper
         elevation={7}
@@ -41,12 +87,14 @@ function App() {
         }}
       >
         <TextField 
+          value={form.email}
           name="email" 
           label="Email" 
           variant="standard" 
           onChange={e => changeForm(e)} 
         />
         <TextField 
+          value={form.password}
           name="password" 
           label="Password" 
           variant="standard"
@@ -58,6 +106,7 @@ function App() {
             variant="contained"
             color="primary"
             sx={{ mt: 3 }}
+            onClick={signUser}
           >
             Auth
           </Button>
@@ -99,7 +148,13 @@ function App() {
           </Paper>
         </Stack>
 
-        <Button variant="contained" color="inherit">Logout</Button>
+        <Button 
+          variant="contained" 
+          color="inherit"
+          onClick={signoutUser}
+        >
+          Logout
+          </Button>
       </Paper>
     </Box>
   )

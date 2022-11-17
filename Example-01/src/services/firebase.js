@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getDatabase, set, ref, push, onValue } from "firebase/database";
 import { firebaseConfig } from "../config/firebaseConfig";
 
@@ -31,12 +31,22 @@ const db = {
 }
 
 const auth = {
-    createUser(email, password) {
+    async createUser(email, password) {
         const authApp = getAuth(app);
 
-        createUserWithEmailAndPassword(authApp, email, password)
-            .then(res => console.log(res))
-            .catch(e => console.log(e));
+        const res = await createUserWithEmailAndPassword(authApp, email, password);
+
+        return res;
+    },
+    async signUser(email, password) {
+        const authApp = getAuth(app);
+
+        const userCredential = await signInWithEmailAndPassword(authApp, email, password);
+
+        return userCredential.user;
+    },
+    async signoutUser() { 
+        await signOut(getAuth(app));
     }
 }
 

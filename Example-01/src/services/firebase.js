@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { 
+    createUserWithEmailAndPassword, 
+    getAuth, 
+    signInWithEmailAndPassword, 
+    signOut,
+    signInAnonymously,
+} from "firebase/auth";
 import { getDatabase, set, ref, push, onValue } from "firebase/database";
 import { firebaseConfig } from "../config/firebaseConfig";
 
@@ -47,6 +53,11 @@ const auth = {
     },
     async signoutUser() { 
         await signOut(getAuth(app));
+    },
+    async anonymousSign() {
+        const anonymous = await signInAnonymously(getAuth(app));
+
+        return anonymous.user;
     }
 }
 

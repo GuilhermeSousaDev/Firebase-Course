@@ -21,6 +21,14 @@ export default function AuthTypesButtons({ setUser, setMessage, setIsOpenSnackba
         changeStates('You Logout with Success', '');
     }
 
+    const githubSign = async () => {
+        const user = await auth.githubSign();
+
+        console.log(user);
+
+        setUser(user);
+    }
+
     return (
         <>
             <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -34,7 +42,7 @@ export default function AuthTypesButtons({ setUser, setMessage, setIsOpenSnackba
                     <Google />
                     </IconButton>
                 </Paper>
-                <Paper elevation={5}>
+                <Paper elevation={5} onClick={githubSign}>
                     <IconButton color="primary">
                     <GitHub />
                     </IconButton>

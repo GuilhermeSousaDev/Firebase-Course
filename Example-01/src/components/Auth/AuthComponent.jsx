@@ -43,7 +43,9 @@ function AuthComponent() {
                                     user.email : 'Anonymous' 
                             }
                         </Typography>
-                        <Avatar src={user.photoURL ? user.photoURL : ''} >AN</Avatar>
+                        <Avatar src={user.photoURL ? user.photoURL : ''} >
+                            { user.isAnonymous && 'AN' }
+                        </Avatar>
                         <Typography>{ user.uid }</Typography>
                     </>
                 )

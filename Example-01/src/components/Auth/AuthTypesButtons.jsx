@@ -24,7 +24,11 @@ export default function AuthTypesButtons({ setUser, setMessage, setIsOpenSnackba
     const githubSign = async () => {
         const user = await auth.githubSign();
 
-        console.log(user);
+        setUser(user);
+    }
+
+    const googleSign = async () => {
+        const user = await auth.googleSign();
 
         setUser(user);
     }
@@ -37,7 +41,7 @@ export default function AuthTypesButtons({ setUser, setMessage, setIsOpenSnackba
                     <Twitter />
                     </IconButton>
                 </Paper>
-                <Paper elevation={5}>
+                <Paper elevation={5} onClick={googleSign}>
                     <IconButton color="warning">
                     <Google />
                     </IconButton>

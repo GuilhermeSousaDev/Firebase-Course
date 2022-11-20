@@ -7,6 +7,7 @@ import {
     signInAnonymously,
     signInWithPopup,
     GithubAuthProvider,
+    GoogleAuthProvider,
 } from "firebase/auth";
 import { getDatabase, set, ref, push, onValue } from "firebase/database";
 import { firebaseConfig } from "../config/firebaseConfig";
@@ -67,6 +68,15 @@ const auth = {
         const gitHubProvider = new GithubAuthProvider();
 
         const res = await signInWithPopup(authApp, gitHubProvider);
+
+        return res.user;
+    },
+    async googleSign() {
+        const authApp = getAuth(app);
+
+        const googleProvider = new GoogleAuthProvider();
+
+        const res = await signInWithPopup(authApp, googleProvider);
 
         return res.user;
     }

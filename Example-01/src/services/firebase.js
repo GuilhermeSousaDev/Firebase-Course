@@ -8,6 +8,8 @@ import {
     signInWithPopup,
     GithubAuthProvider,
     GoogleAuthProvider,
+    FacebookAuthProvider,
+    TwitterAuthProvider,
 } from "firebase/auth";
 import { getDatabase, set, ref, push, onValue } from "firebase/database";
 import { firebaseConfig } from "../config/firebaseConfig";
@@ -77,6 +79,24 @@ const auth = {
         const googleProvider = new GoogleAuthProvider();
 
         const res = await signInWithPopup(authApp, googleProvider);
+
+        return res.user;
+    },
+    async facebookSign() {
+        const authApp = getAuth(app);
+
+        const facebookProvider = new FacebookAuthProvider();
+
+        const res = await signInWithPopup(authApp, facebookProvider);
+
+        return res.user;
+    },
+    async twitterSign() {
+        const authApp = getAuth(app);
+
+        const twitterProvider = new TwitterAuthProvider();
+
+        const res = await signInWithPopup(authApp, twitterProvider);
 
         return res.user;
     }

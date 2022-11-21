@@ -24,19 +24,31 @@ export default function AuthTypesButtons({ setUser, setMessage, setIsOpenSnackba
     const githubSign = async () => {
         const user = await auth.githubSign();
 
-        setUser(user);
+        changeStates(`You Sign with ${user.displayName}`, user);
     }
 
     const googleSign = async () => {
         const user = await auth.googleSign();
 
-        setUser(user);
+        changeStates(`You Sign with ${user.displayName}`, user);
+    }
+
+    const facebookSign = async () => {
+        const user = await auth.facebookSign();
+
+        changeStates(`You Sign with ${user.displayName}`, user);
+    }
+
+    const twitterSign = async () => {
+        const user = await auth.twitterSign();
+
+        changeStates(`You Sign with ${user.displayName}`, user);
     }
 
     return (
         <>
             <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-                <Paper elevation={5}>
+                <Paper elevation={5} onClick={twitterSign}>
                     <IconButton color="primary">
                     <Twitter />
                     </IconButton>
@@ -51,7 +63,7 @@ export default function AuthTypesButtons({ setUser, setMessage, setIsOpenSnackba
                     <GitHub />
                     </IconButton>
                 </Paper>
-                <Paper elevation={5}>
+                <Paper elevation={5} onClick={facebookSign}>
                     <IconButton color="inherit">
                     <Facebook />
                     </IconButton>

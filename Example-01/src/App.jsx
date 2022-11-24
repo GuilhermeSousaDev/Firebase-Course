@@ -5,7 +5,7 @@ import Storage from "./pages/Storage";
 function App() {
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+    <Box display="flex" flexDirection="column" alignItems="center">
       <Auth /> 
       <Storage />
     </Box>

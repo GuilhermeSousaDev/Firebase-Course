@@ -1,47 +1,33 @@
-import { UploadFile } from "@mui/icons-material";
-import { IconButton, Box, Input } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useState, useEffect } from "react";
+import { IconButton, Box } from "@mui/material";
+import { UploadFile, FileUpload } from "@mui/icons-material";
+import { useDropzone } from 'react-dropzone';
 
 export default function Storage() {
-    const initialFormState = { file: '' };
-    const [form, setForm] = useState(initialFormState);
+    const [file, setFile] = useState();
 
-    const changeForm = useCallback(e => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value,
-        });
-    }, [form]);
+    const { getRootProps } = useDropzone({
+        onDrop: files => {
+            setFile(Object.assign(files[0], { preview: URL.createObjectURL(files[0]) }))
+        },
+    });
+
+    useEffect(() => {
+        console.log(file);
+    }, [file]);
 
     return (
         <Box 
-            sx={{ width: 200 }} 
-            mt={5} 
+            {...getRootProps()}
             display="flex" 
             flexDirection="column"
             alignItems="center"
+            justifyContent="center"
+            sx={{ width: 200, border: '1px solid black', width: '70vh', height: '70vh', mt: 5 }}
         >
-            <Input
-                sx={{ display: 'none' }}
-                type="file"
-                value={form.file}
-                name="file"
-                label="File"
-                variant="standard"
-                onChange={e => changeForm(e)}
-            />
-
-            <Box 
-                display="flex" 
-                flexDirection="column" 
-                mb={2} 
-                sx={{ border: '1px solid black', width: '70vh', height: '70vh' }}
-            >
-                <IconButton>
-                    <UploadFile />
-                    Upload
-                </IconButton>
-            </Box>
+            <IconButton size="medium">
+                <FileUpload />
+            </IconButton>
         </Box>
     )
 }

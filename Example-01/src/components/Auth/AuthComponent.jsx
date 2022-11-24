@@ -16,7 +16,7 @@ function AuthComponent() {
     const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
     return (
-        <Box align="center" justifyContent="center" direction="column" spacing={2}>
+        <Box sx={{ width: 700 }} align="center" justifyContent="center" direction="column" spacing={2}>
             <Typography variant="h5">Firebase</Typography>
 
             <Snackbar

@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
-import { IconButton, Box } from "@mui/material";
-import { UploadFile, FileUpload } from "@mui/icons-material";
+import { IconButton, Paper } from "@mui/material";
+import { UploadFile } from "@mui/icons-material";
 import { useDropzone } from 'react-dropzone';
 
 export default function Storage() {
     const [file, setFile] = useState();
+    const [color, setColor] = useState('primary');
 
     const { getRootProps } = useDropzone({
         onDrop: files => {
             setFile(Object.assign(files[0], { preview: URL.createObjectURL(files[0]) }))
         },
+        onDragEnter: () => setColor('secondary'),
+        onDragOver: () => setColor('primary'),
+        onDropAccepted: () => setColor('success'),
+        onDropRejected: () => setColor('error'),
     });
 
     useEffect(() => {
@@ -17,17 +22,23 @@ export default function Storage() {
     }, [file]);
 
     return (
-        <Box 
+        <Paper 
             {...getRootProps()}
-            display="flex" 
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            sx={{ width: 200, border: '1px solid black', width: '70vh', height: '70vh', mt: 5 }}
+            elevation={7}
+            sx={{ 
+                display:"flex", 
+                flexDirection:"column",
+                alignItems:"center",
+                justifyContent:"center", 
+                width: '70vh', height: '70vh', mt: 5, cursor: 'pointer',
+            }}
         >
-            <IconButton size="medium">
-                <FileUpload />
+            <IconButton>
+                <UploadFile 
+                    fontSize="large"  
+                    color={color}
+                />
             </IconButton>
-        </Box>
+        </Paper>
     )
 }

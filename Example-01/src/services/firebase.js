@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getStorage, ref as storageRef, uploadBytesResumable } from 'firebase/storage';
 import { 
     createUserWithEmailAndPassword, 
     getAuth, 
@@ -102,4 +103,16 @@ const auth = {
     }
 }
 
-export { db, auth };
+const storage = {
+    uploadFile(file) {
+        const storage = getStorage();
+
+        const imagesRef = storageRef(storage, `images/${file.name}`);
+
+        const task = uploadBytesResumable(imagesRef, file);
+
+        return task;
+    }
+}
+
+export { db, auth, storage };
